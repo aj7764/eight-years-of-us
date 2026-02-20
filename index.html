@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eight Years of Us</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Dancing+Script:wght@400;500;600&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+    
+    .animate-fade-in {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    
+    .paper-texture {
+      background-image: 
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+    }
+    
+    .film-grain::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.18'/%3E%3C/svg%3E");
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    
+    .torn-edge {
+      clip-path: polygon(
+        0% 2%, 3% 0%, 7% 3%, 12% 1%, 18% 2%, 23% 0%, 28% 3%, 35% 1%, 42% 2%, 48% 0%, 55% 2%, 62% 1%, 68% 3%, 75% 0%, 82% 2%, 88% 1%, 93% 3%, 97% 0%, 100% 2%,
+        100% 98%, 97% 100%, 93% 97%, 88% 99%, 82% 98%, 75% 100%, 68% 97%, 62% 99%, 55% 98%, 48% 100%, 42% 98%, 35% 99%, 28% 97%, 23% 100%, 18% 98%, 12% 99%, 7% 97%, 3% 100%, 0% 98%
+      );
+    }
+    
+    .handwritten {
+      font-family: 'Dancing Script', cursive;
+      letter-spacing: 0.5px;
+    }
+    
+    .serif-elegant {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 2px;
+    }
+    
+    .serif-body {
+      font-family: 'Lora', serif;
+      line-height: 1.8;
+    }
+    
+    .sepia-overlay {
+      position: relative;
+    }
+    
+    .sepia-overlay::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(210, 180, 140, 0.08) 0%, rgba(139, 90, 43, 0.04) 100%);
+      pointer-events: none;
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .floral-corner {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      opacity: 0.12;
+    }
+    
+    .heart-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    
+    .heart-divider::before,
+    .heart-divider::after {
+      content: '';
+      flex: 1;
+      max-width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a86c, transparent);
+    }
+
+    .highlight-date {
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(201, 168, 108, 0.15) 0%, rgba(212, 165, 165, 0.1) 100%);
+      padding: 0.5rem 1rem;
+      border-left: 3px solid #c9a86c;
+      border-radius: 2px;
+      margin: 1rem 0;
+    }
+
+    .highlight-date p {
+      margin: 0;
+      color: #5d4e37;
+      font-weight: 600;
+    }
+
+    .highlight-date .date-label {
+      color: #c9a86c;
+      font-size: 0.9em;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full serif-body" style="background-color: #faf6f0;">
+  <div id="app-wrapper" class="w-full h-full overflow-auto paper-texture sepia-overlay"><!-- Decorative Floral Corners -->
+   <svg class="floral-corner top-0 left-0" viewbox="0 0 100 100" style="transform: rotate(0deg);"><path d="M10,50 Q25,25 50,10 Q35,35 30,50 Q35,35 50,30 Q25,45 10,50" fill="#c9a86c" /> <path d="M5,30 Q15,15 30,5 Q20,20 15,30 Q20,20 30,15 Q15,25 5,30" fill="#d4a5a5" /> <circle cx="20" cy="20" r="3" fill="#c9a86c" /> <circle cx="35" cy="35" r="2" fill="#d4a5a5" />
+   </svg>
+   <svg class="floral-corner top-0 right-0" viewbox="0 0 100 100" style="transform: scaleX(-1);"><path d="M10,50 Q25,25 50,10 Q35,35 30,50 Q35,35 50,30 Q25,45 10,50" fill="#c9a86c" /> <path d="M5,30 Q15,15 30,5 Q20,20 15,30 Q20,20 30,15 Q15,25 5,30" fill="#d4a5a5" /> <circle cx="20" cy="20" r="3" fill="#c9a86c" /> <circle cx="35" cy="35" r="2" fill="#d4a5a5" />
+   </svg><!-- Hero Section -->
+   <section class="min-h-screen flex flex-col items-center justify-center px-6 py-16 relative">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+     <div class="absolute top-20 left-10 w-32 h-32 rounded-full opacity-10" style="background: radial-gradient(circle, #c9a86c 0%, transparent 70%);"></div>
+     <div class="absolute bottom-32 right-16 w-48 h-48 rounded-full opacity-10" style="background: radial-gradient(circle, #d4a5a5 0%, transparent 70%);"></div>
+    </div>
+    <div class="text-center max-w-3xl mx-auto relative z-10"><!-- Decorative Top Element -->
+     <div class="mb-8 animate-fade-in opacity-0">
+      <svg width="80" height="40" viewbox="0 0 80 40" class="mx-auto" style="color: #c9a86c;"><path d="M40,35 C25,35 15,25 15,15 C15,8 20,3 28,3 C35,3 40,10 40,10 C40,10 45,3 52,3 C60,3 65,8 65,15 C65,25 55,35 40,35" fill="currentColor" opacity="0.6" />
+      </svg>
+     </div>
+     <p class="handwritten text-2xl md:text-3xl mb-4 animate-fade-in opacity-0 delay-100" style="color: #8b5a2b;" id="year-text">2018 — 2026</p>
+     <h1 class="serif-elegant text-5xl md:text-7xl lg:text-8xl font-medium mb-6 animate-fade-in opacity-0 delay-200 leading-tight" style="color: #5d4e37;" id="hero-title">Eight Years of Us</h1>
+     <div class="w-24 h-px mx-auto mb-6 animate-fade-in opacity-0 delay-300" style="background: linear-gradient(90deg, transparent, #c9a86c, transparent);"></div>
+     <p class="serif-body text-xl md:text-2xl italic animate-fade-in opacity-0 delay-400" style="color: #7a6955;" id="hero-subtitle">"Still choosing you, every day."</p><!-- Scroll Indicator -->
+     <div class="mt-16 animate-fade-in opacity-0 delay-500">
+      <div class="w-6 h-10 border-2 rounded-full mx-auto relative" style="border-color: #c9a86c;">
+       <div class="w-1.5 h-3 rounded-full absolute top-2 left-1/2 -translate-x-1/2" style="background-color: #c9a86c; animation: gentlePulse 2s infinite;"></div>
+      </div>
+      <p class="handwritten text-sm mt-3" style="color: #a08060;">scroll to begin our story</p>
+     </div>
+    </div>
+   </section><!-- Photo Collage Section -->
+   <section class="py-20 px-6 relative">
+    <div class="max-w-6xl mx-auto">
+     <div class="text-center mb-16 scroll-fade">
+      <p class="handwritten text-2xl mb-2" style="color: #c9a86c;">captured moments</p>
+      <h2 class="serif-elegant text-4xl md:text-5xl font-medium" style="color: #5d4e37;">Our Memories</h2>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8"><!-- Photo 1 -->
+      <div class="scroll-fade transform rotate-2 hover:rotate-0 transition-transform duration-500">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/first date.jpeg" alt="First Date" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">where it all began</p>
+       </div>
+      </div><!-- Photo 2 -->
+      <div class="scroll-fade transform -rotate-1 hover:rotate-0 transition-transform duration-500 md:mt-8">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/adventure.jpg" alt="Adventures Together" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">every trip with you</p>
+       </div>
+      </div><!-- Photo 3 -->
+      <div class="scroll-fade transform rotate-1 hover:rotate-0 transition-transform duration-500">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/together.jpg" alt="Us, Always" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">my favorite view</p>
+       </div>
+      </div><!-- Photo 4 -->
+      <div class="scroll-fade transform -rotate-2 hover:rotate-0 transition-transform duration-500 md:col-start-1">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/funny.png" alt="Love Letters" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">words from the heart</p>
+       </div>
+      </div><!-- Photo 5 -->
+      <div class="scroll-fade transform rotate-3 hover:rotate-0 transition-transform duration-500 md:mt-4">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/favorite.jpeg" alt="Special Moments" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">celebrations together</p>
+       </div>
+      </div><!-- Photo 6 -->
+      <div class="scroll-fade transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+       <div class="torn-edge p-3 shadow-lg relative film-grain" style="background-color: #f5efe6;">
+        <div class="aspect-square flex items-center justify-center overflow-hidden">
+         <img src="images/always_favo.jpg" alt="Infinite Love" class="w-full h-full object-cover" />
+        </div>
+        <p class="handwritten text-center mt-3 text-sm" style="color: #7a6955;">forever and always</p>
+       </div>
+      </div>
+     </div>
+     <p class="handwritten text-center text-lg mt-12 scroll-fade" style="color: #a08060;">✦ add your own photos to make it yours ✦</p>
+    </div>
+   </section><!-- Timeline Section -->
+   <section class="py-20 px-6 relative" style="background: linear-gradient(180deg, transparent 0%, rgba(201, 168, 108, 0.05) 50%, transparent 100%);">
+    <div class="max-w-3xl mx-auto">
+     <div class="text-center mb-16 scroll-fade">
+      <p class="handwritten text-2xl md:text-3xl mb-3" style="color: #c9a86c;">💙</p>
+      <h2 class="serif-elegant text-4xl md:text-5xl font-medium" style="color: #5d4e37;" id="timeline-title">Our Story</h2>
+      <div class="w-16 h-px mx-auto mt-6" style="background: linear-gradient(90deg, transparent, #d4a5a5, transparent);"></div>
+     </div>
+     <div class="relative"><!-- Timeline Line -->
+      <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px" style="background: linear-gradient(180deg, transparent, #c9a86c 10%, #c9a86c 90%, transparent);"></div><!-- Timeline Entry 1 -->
+      <div class="scroll-fade relative pl-12 md:pl-0 md:w-1/2 md:pr-12 mb-12">
+       <div class="absolute left-2 md:left-auto md:right-0 w-5 h-5 rounded-full border-2 transform md:translate-x-1/2" style="background-color: #faf6f0; border-color: #c9a86c; top: 0.5rem;"></div>
+       <div class="p-8 rounded shadow-sm" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.9) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 2px solid rgba(201, 168, 108, 0.2);">
+        <p class="handwritten text-xl mb-1" style="color: #c9a86c;">2018</p>
+        <h3 class="serif-elegant text-2xl font-medium mb-4" style="color: #5d4e37;">When You Fell First</h3>
+        <p class="serif-body leading-relaxed" style="color: #7a6955;">You told me later that this was the year you fell in love with me. And when I think about it now, I can see it — the way you looked at me, the way you stayed, the quiet care in small things. I didn't fully understand what we were becoming back then. But you did. And you stayed.</p>
+       </div>
+      </div><!-- Timeline Entry 2 - HIGHLIGHT -->
+      <div class="scroll-fade relative pl-12 md:pl-0 md:w-1/2 md:ml-auto md:pl-12 mb-12">
+       <div class="absolute left-2 md:left-0 w-6 h-6 rounded-full border-3 transform md:-translate-x-1/2" style="background: linear-gradient(135deg, #c9a86c 0%, #d4a5a5 100%); border-color: #faf6f0; box-shadow: 0 0 0 4px rgba(201, 168, 108, 0.2); top: 0.25rem;"></div>
+       <div class="p-8 rounded shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, rgba(201, 168, 108, 0.12) 0%, rgba(212, 165, 165, 0.1) 100%); border: 2px solid #c9a86c; border-left: 4px solid #c9a86c;">
+        <div class="absolute top-0 right-0 opacity-10" style="width: 120px; height: 120px; background: radial-gradient(circle, #c9a86c, transparent); transform: translate(30px, -30px);"></div>
+        <p class="handwritten text-sm tracking-widest mb-2" style="color: #c9a86c;">✦ THE DAY I CHOSE YOU ✦</p>
+        <p class="handwritten text-2xl mb-3" style="color: #5d4e37;">February 21, 2019</p>
+        <h3 class="serif-elegant text-2xl font-medium mb-4" style="color: #5d4e37;">I Chose You</h3>
+        <p class="serif-body leading-relaxed" style="color: #7a6955;">This was the day I gathered the courage and chose you out loud. Not because everything was perfect. Not because love was easy. But because something about you felt steady, safe, and real. That day wasn't just a proposal. It was the beginning of choosing each other intentionally.</p>
+       </div>
+      </div><!-- Timeline Entry 3 -->
+      <div class="scroll-fade relative pl-12 md:pl-0 md:w-1/2 md:pr-12 mb-12">
+       <div class="absolute left-2 md:left-auto md:right-0 w-5 h-5 rounded-full border-2 transform md:translate-x-1/2" style="background-color: #faf6f0; border-color: #d4a5a5; top: 0.5rem;"></div>
+       <div class="p-8 rounded shadow-sm" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.9) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 2px solid rgba(212, 165, 165, 0.2);">
+        <p class="handwritten text-xl mb-1" style="color: #d4a5a5;">November 28, 2022</p>
+        <h3 class="serif-elegant text-2xl font-medium mb-4" style="color: #5d4e37;">We Found Each Other Again</h3>
+        <p class="serif-body leading-relaxed" style="color: #7a6955;">Life tested us. Time changed us. But when we saw each other again, something beautiful happened. We didn't just meet. We chose each other again. Not out of habit. Not out of history. But because even after everything, we were still each other's peace. And that meant more than anything.</p>
+       </div>
+      </div><!-- Timeline Entry 4 -->
+      <div class="scroll-fade relative pl-12 md:pl-0 md:w-1/2 md:ml-auto md:pl-12 mb-12">
+       <div class="absolute left-2 md:left-0 w-5 h-5 rounded-full border-2 transform md:-translate-x-1/2" style="background-color: #faf6f0; border-color: #c9a86c; top: 0.5rem;"></div>
+       <div class="p-8 rounded shadow-sm" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.9) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 2px solid rgba(201, 168, 108, 0.2);">
+        <p class="handwritten text-xl mb-1" style="color: #c9a86c;">Every Day After</p>
+        <h3 class="serif-elegant text-2xl font-medium mb-4" style="color: #5d4e37;">Quiet Consistency</h3>
+        <p class="serif-body leading-relaxed" style="color: #7a6955;">There was no big dramatic moment. Just quiet consistency. Calls. Conversations. Small efforts. Showing up. Staying patient. Growing up. Love became less about butterflies and more about certainty.</p>
+       </div>
+      </div><!-- Timeline Entry 5 -->
+      <div class="scroll-fade relative pl-12 md:pl-0 md:w-1/2 md:pr-12">
+       <div class="absolute left-2 md:left-auto md:right-0 w-5 h-5 rounded-full border-2 transform md:translate-x-1/2" style="background-color: #faf6f0; border-color: #d4a5a5; top: 0.5rem;"></div>
+       <div class="p-8 rounded shadow-sm" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.9) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 2px solid rgba(212, 165, 165, 0.2);">
+        <p class="handwritten text-xl mb-1" style="color: #d4a5a5;">2025</p>
+        <h3 class="serif-elegant text-2xl font-medium mb-4" style="color: #5d4e37;">Eight Years</h3>
+        <p class="serif-body leading-relaxed" style="color: #7a6955;">Eight years. We are not the same people we were in 2018. We've grown. We've changed. We've learned. But one thing hasn't changed. It's still you. It's still me. It's still us. And that's my favorite part.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- 8 Things I Love Section -->
+   <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto">
+     <div class="text-center mb-16 scroll-fade">
+      <p class="handwritten text-2xl md:text-3xl mb-3" style="color: #d4a5a5;">💌</p>
+      <h2 class="serif-elegant text-4xl md:text-5xl font-medium" style="color: #5d4e37;" id="love-title">7 Things I Love About You</h2>
+      <div class="w-16 h-px mx-auto mt-6" style="background: linear-gradient(90deg, transparent, #c9a86c, transparent);"></div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-8"><!-- Item 1 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #c9a86c;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #c9a86c;">1</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">The Way You Stay</h3>
+       <p class="serif-body" style="color: #7a6955;">Even when things aren't easy. Through storms and silence, you've always shown up for me. That consistency is my anchor.</p>
+      </div><!-- Item 2 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #d4a5a5;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #d4a5a5;">2</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">Your Quiet Strength</h3>
+       <p class="serif-body" style="color: #7a6955;">You don't talk about it, but I see it. The way you carry the weight of our dreams without ever letting me feel alone.</p>
+      </div><!-- Item 3 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #c9a86c;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #c9a86c;">3</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">How You Make Me Feel Safe</h3>
+       <p class="serif-body" style="color: #7a6955;">Without trying too hard. In your presence, I can just be myself—completely, vulnerably, authentically.</p>
+      </div><!-- Item 4 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #d4a5a5;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #d4a5a5;">4</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">Your Patience</h3>
+       <p class="serif-body" style="color: #7a6955;">Especially with me. You've taught me what it means to be patient with someone. You've taught me that love waits.</p>
+      </div><!-- Item 5 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #c9a86c;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #c9a86c;">5</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">The Way You Listen</h3>
+       <p class="serif-body" style="color: #7a6955;">Not just hear, but really listen. You remember the small things. You care about my thoughts, my dreams, my fears.</p>
+      </div><!-- Item 6 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 239, 230, 0.85) 0%, rgba(240, 233, 223, 0.8) 100%); border-top: 3px solid #d4a5a5;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-10" style="color: #d4a5a5;">6</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">How You Grow</h3>
+       <p class="serif-body" style="color: #7a6955;">You never stop trying to become better. Your commitment to growth inspires me every single day.</p>
+      </div><!-- Item 7 -->
+      <div class="scroll-fade p-8 rounded shadow-sm relative overflow-hidden col-span-full md:col-span-1 md:col-start-2" style="background: linear-gradient(135deg, rgba(201, 168, 108, 0.1) 0%, rgba(212, 165, 165, 0.08) 100%); border: 2px solid #c9a86c;"><span class="absolute top-6 right-6 serif-elegant text-6xl font-light opacity-15" style="color: #c9a86c;">7</span>
+       <h3 class="serif-elegant text-xl font-medium mb-3" style="color: #5d4e37;">The Way You Choose Us</h3>
+       <p class="serif-body font-medium" style="color: #5d4e37;">Again and again. Not just once, but every day. That's the most beautiful thing I've ever known.</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Love Letter Section -->
+   <section class="py-20 px-6" style="background: linear-gradient(180deg, transparent 0%, rgba(212, 165, 165, 0.08) 50%, transparent 100%);">
+    <div class="max-w-2xl mx-auto">
+     <div class="text-center mb-12 scroll-fade">
+      <div class="heart-divider mb-6">
+       <svg width="24" height="24" viewbox="0 0 24 24" style="color: #d4a5a5;"><path d="M12,21 C6,17 3,13 3,9 C3,5 6,2 10,2 C12,2 12,4 12,4 C12,4 12,2 14,2 C18,2 21,5 21,9 C21,13 18,17 12,21" fill="currentColor" />
+       </svg>
+      </div>
+      <h2 class="serif-elegant text-4xl md:text-5xl font-medium" style="color: #5d4e37;" id="letter-title">Forever With You</h2>
+     </div>
+     <div class="scroll-fade">
+      <div class="p-10 md:p-12 rounded shadow-lg relative" style="background: linear-gradient(135deg, #faf6f0 0%, #f5efe6 100%); border: 1px solid rgba(201, 168, 108, 0.2);"><!-- Paper Lines Effect -->
+       <div class="absolute inset-0 opacity-8 pointer-events-none" style="background-image: repeating-linear-gradient(transparent, transparent 31px, #c9a86c 31px, #c9a86c 32px); border-radius: 6px;"></div>
+       <div class="relative z-10">
+        <p class="handwritten text-xl md:text-2xl leading-loose mb-6" style="color: #5d4e37;">My Dearest Love,</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-6" style="color: #7a6955;">Eight years feels both long and short at the same time. Long enough for us to have grown, changed, stumbled, and stood back up. Short enough that I still remember the early days like they were yesterday.</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-6" style="color: #7a6955;">You loved me first. I chose you next. And somewhere in between, we built something that feels steady and real. Something that doesn't shake when the world does.</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-6" style="color: #7a6955;">What I love most about us is not just the happy moments. It's the way we came back to each other. The way we decided, more than once, that this is worth it. Worth the effort. Worth the vulnerability. Worth it all.</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-6" style="color: #7a6955;">You are not just my love story. You are my calm. My safe place. My constant. The person I don't have to perform for or explain myself to. You just know.</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-6" style="color: #7a6955;">After eight years, I don't just feel butterflies. I feel certainty. And I would choose you again — every single time. In every lifetime, in every version of me.</p>
+        <p class="handwritten text-lg md:text-xl leading-loose mb-8" style="color: #7a6955;">Thank you for being mine. Thank you for choosing us. Thank you for forever.</p>
+        <p class="handwritten text-2xl md:text-3xl" style="color: #5d4e37;">Forever Yours 🤍</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="py-16 px-6 text-center">
+    <div class="scroll-fade">
+     <svg width="60" height="60" viewbox="0 0 60 60" class="mx-auto mb-6" style="color: #c9a86c;"><path d="M30,50 C15,42 7.5,32.5 7.5,22.5 C7.5,12.5 15,5 25,5 C30,5 30,12.5 30,12.5 C30,12.5 30,5 35,5 C45,5 52.5,12.5 52.5,22.5 C52.5,32.5 45,42 30,50" fill="currentColor" opacity="0.6" /> <text x="30" y="30" text-anchor="middle" font-size="14" font-family="'Cormorant Garamond', serif" fill="#faf6f0">
+       8
+      </text>
+     </svg>
+     <p class="serif-elegant text-2xl md:text-3xl mb-4" style="color: #5d4e37;">Eight Years of Love</p>
+     <p class="handwritten text-xl" style="color: #a08060;">2018 — 2026</p>
+     <div class="mt-8 flex justify-center gap-2"><span style="color: #d4a5a5;">♥</span> <span style="color: #c9a86c;">♥</span> <span style="color: #d4a5a5;">♥</span>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      hero_title: 'Eight Years of Us',
+      hero_subtitle: '"Still choosing you, every day."',
+      timeline_title: 'Our Story',
+      love_title: '8 Things I Love About You',
+      letter_title: 'Forever With You',
+      background_color: '#faf6f0',
+      text_color: '#5d4e37',
+      accent_color: '#c9a86c',
+      secondary_accent: '#d4a5a5',
+      muted_text: '#7a6955',
+      font_family: 'Cormorant Garamond',
+      font_size: 16
+    };
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          // Update hero section
+          const heroTitle = document.getElementById('hero-title');
+          if (heroTitle) heroTitle.textContent = config.hero_title || defaultConfig.hero_title;
+          
+          const heroSubtitle = document.getElementById('hero-subtitle');
+          if (heroSubtitle) heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+          
+          // Update timeline title
+          const timelineTitle = document.getElementById('timeline-title');
+          if (timelineTitle) timelineTitle.textContent = config.timeline_title || defaultConfig.timeline_title;
+          
+          // Update love section title
+          const loveTitle = document.getElementById('love-title');
+          if (loveTitle) loveTitle.textContent = config.love_title || defaultConfig.love_title;
+          
+          // Update letter title
+          const letterTitle = document.getElementById('letter-title');
+          if (letterTitle) letterTitle.textContent = config.letter_title || defaultConfig.letter_title;
+          
+          // Apply colors
+          const bgColor = config.background_color || defaultConfig.background_color;
+          const textColor = config.text_color || defaultConfig.text_color;
+          const accentColor = config.accent_color || defaultConfig.accent_color;
+          const secondaryAccent = config.secondary_accent || defaultConfig.secondary_accent;
+          
+          document.body.style.backgroundColor = bgColor;
+          
+          // Apply font
+          const fontFamily = config.font_family || defaultConfig.font_family;
+          document.querySelectorAll('.serif-elegant').forEach(el => {
+            el.style.fontFamily = `${fontFamily}, serif`;
+          });
+          
+          // Apply font size scaling
+          const baseSize = config.font_size || defaultConfig.font_size;
+          document.querySelectorAll('.serif-body').forEach(el => {
+            el.style.fontSize = `${baseSize}px`;
+          });
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_accent || defaultConfig.secondary_accent,
+              set: (value) => {
+                config.secondary_accent = value;
+                window.elementSdk.setConfig({ secondary_accent: value });
+              }
+            },
+            {
+              get: () => config.muted_text || defaultConfig.muted_text,
+              set: (value) => {
+                config.muted_text = value;
+                window.elementSdk.setConfig({ muted_text: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+          ['timeline_title', config.timeline_title || defaultConfig.timeline_title],
+          ['love_title', config.love_title || defaultConfig.love_title],
+          ['letter_title', config.letter_title || defaultConfig.letter_title]
+        ])
+      });
+    }
+
+    // Scroll Animation Observer
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all scroll-fade elements
+    document.querySelectorAll('.scroll-fade').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d0f85ac835c802c',t:'MTc3MTYwNjQyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
